@@ -3,7 +3,7 @@
  */
 
 // window size (it's a square)
-final int WINDOW_SIZE = 400;
+final int WINDOW_SIZE = 1000;
 // how many milliseconds to show each state for
 final int MILLIS_PER_STATE= 1000;
  
@@ -31,7 +31,21 @@ void setup() {
   statePostalCodes = data.getAllStatePostalCodes();
   print("Loaded data for "+data.getStateCount()+" states");
 }
-
+//Create a pie chart for displaying the relative votes for each candidate as a pie chart
+void pieChart(float diameter, long[] data) {
+  float lastAngle = 0;
+  //loop through the data list
+  for (int i = 0; i < data.length; i++) {
+    data[i]=data[i]*4;
+    //fill the pie chart with color
+    fill(50+i*101,50,250+i*-200);
+    //create the arcs of the pi
+    arc(width/2, height/2, diameter, diameter, lastAngle, lastAngle+radians(data[i]));
+    lastAngle += radians(data[i]);
+    //print the value of i in the console so I can debug
+    //System.out.println(data[i]);
+  }
+}
 /**
  * This is called repeatedly
  */
@@ -60,6 +74,13 @@ void draw() {
     currentStateIndex = (currentStateIndex+1) % statePostalCodes.length;
     // update the last time we drew a state
     lastStateMillis = millis();
+    // declare the variables we will need to make the pie chart
+    long obama_num = Math.round(state.pctForObama);
+    long romney_num = Math.round(state.pctForRomney);
+    long[] angles = {obama_num, romney_num};
+    pieChart(300, angles);
   }
 }
+
+ 
 
